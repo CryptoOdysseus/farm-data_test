@@ -19,24 +19,47 @@ ChartJS.register(
   Legend
 );
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const labels = ['time',];
 
 const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: [234, 234, 45, 546, 645, 879, 765],
+      label: 'pH',
+      data: [34, 24, 45, 46, 45, 79, 65],
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
     {
-      label: 'Dataset 2',
-      data: [284, 294, 745, 846, 515, 579, 165],
+      label: 'Temperature',
+      data: [24, 24, 75, 84, 51, 79, 65],
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
+    {
+      label: 'Rainfall',
+      data: [28, 24, 45, 46, 15, 79, 65],
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+
   ],
 };
 
 export default function App() {
   return <Bar data={data} />;
 }
+
+const [csvHeaders, ...csvData] = `location,datetime,sensorType,value
+Friman Metsola collective,2018-12-31T22:00:00.000Z,pH,6.52
+Friman Metsola collective,2018-12-31T22:00:00.000Z,rainFall,2.6`.split('\n');
+const csvParsedHeaders = csvHeaders.split(',');
+csvData.reduce((csv, dataRow) => {
+    dataRow.split(',').forEach((data, i) => {
+        const header = csvParsedHeaders[i];
+        if (!csv[header]) {
+            csv[header] = [];
+        }
+
+        csv[header].push(data);
+    });
+
+    return csv;
+}, {})
